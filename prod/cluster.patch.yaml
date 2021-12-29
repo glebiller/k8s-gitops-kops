@@ -1,0 +1,35 @@
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  name: k8s-gitops-kops
+spec:
+  configBase: s3://k8s-gitops-kops-state/prod-k8s-gitops-kops
+  masterInternalName: k8s.internal.prod.lebiller.dev
+  masterPublicName: k8s.prod.lebiller.dev
+  networkCIDR: 172.20.0.0/16
+  subnets:
+    - cidr: 172.20.32.0/19
+      name: eu-west-1a
+      type: Private
+      zone: eu-west-1a
+    - cidr: 172.20.64.0/19
+      name: eu-west-1b
+      type: Private
+      zone: eu-west-1b
+    - cidr: 172.20.96.0/19
+      name: eu-west-1c
+      type: Private
+      zone: eu-west-1c
+    - cidr: 172.20.0.0/22
+      name: utility-eu-west-1a
+      type: Utility
+      zone: eu-west-1a
+    - cidr: 172.20.4.0/22
+      name: utility-eu-west-1b
+      type: Utility
+      zone: eu-west-1b
+    - cidr: 172.20.8.0/22
+      name: utility-eu-west-1c
+      type: Utility
+      zone: eu-west-1c

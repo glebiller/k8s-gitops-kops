@@ -1,0 +1,134 @@
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  name: k8s-gitops-kops
+spec:
+  additionalPolicies:
+    master: |
+      [
+        {
+          "Effect": "Allow",
+          "Action": ["elasticloadbalancing:*"],
+          "Resource": ["*"]
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetEncryptionConfiguration"],
+          "Resource": ["*"]
+        }
+      ]
+    node: |
+      [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetEncryptionConfiguration"],
+          "Resource": ["*"]
+        }
+      ]
+  addons:
+    - manifest: https://raw.githubusercontent.com/glebiller/kops-flux-addon/main/addon.yaml
+  api:
+    loadBalancer:
+      class: Network
+      type: Public
+  authentication:
+    aws:
+      image: ghcr.io/glebiller/aws-iam-authenticator-arm:v0.5.3
+      backendMode: CRD
+  authorization:
+    rbac: { }
+  channel: stable
+  cloudLabels:
+    Application: Kubernetes
+    ManagedBy: Kops
+  cloudControllerManager:
+    image: kissy/aws-cloud-controller-manager:v1.22.0-alpha.0-arm64
+    cloudProvider: aws
+  cloudProvider: aws
+  # clusterDNSDomain: cluster.local
+  configBase: s3://k8s-gitops-kops-state/k8s-gitops-kops
+  containerRuntime: containerd
+  etcdClusters:
+    - cpuRequest: 200m
+      etcdMembers:
+        - encryptedVolume: true
+          instanceGroup: master-eu-west-1a
+          name: a
+        - encryptedVolume: true
+          instanceGroup: master-eu-west-1b
+          name: b
+        - encryptedVolume: true
+          instanceGroup: master-eu-west-1c
+          name: c
+      memoryRequest: 100Mi
+      name: main
+    - cpuRequest: 100m
+      etcdMembers:
+        - encryptedVolume: true
+          instanceGroup: master-eu-west-1a
+          name: a
+        - encryptedVolume: true
+          instanceGroup: master-eu-west-1b
+          name: b
+        - encryptedVolume: true
+          instanceGroup: master-eu-west-1c
+          name: c
+      memoryRequest: 100Mi
+      name: events
+  iam:
+    allowContainerRegistry: false
+    legacy: false
+  kubeAPIServer:
+    auditLogMaxAge: 10
+    auditLogMaxBackups: 1
+    auditLogMaxSize: 100
+    cloudProvider: external
+  kubeControllerManager:
+    cloudProvider: external
+    # externalCloudVolumePlugin: aws
+  kubeProxy:
+    enabled: false
+  kubelet:
+    anonymousAuth: false
+    cloudProvider: external
+  kubernetesApiAccess:
+    - 0.0.0.0/0
+  kubernetesVersion: 1.22.4
+  masterInternalName: k8s.internal.k8s-gitops-kops
+  masterPublicName: k8s.k8s-gitops-kops
+  networkCIDR: 172.0.0.0/16
+  networking:
+    cilium:
+      enableNodePort: true
+  nonMasqueradeCIDR: 100.64.0.0/10
+  subnets:
+    - cidr: 172.0.32.0/19
+      name: eu-west-1a
+      type: Private
+      zone: eu-west-1a
+    - cidr: 172.0.64.0/19
+      name: eu-west-1b
+      type: Private
+      zone: eu-west-1b
+    - cidr: 172.0.96.0/19
+      name: eu-west-1c
+      type: Private
+      zone: eu-west-1c
+    - cidr: 172.0.0.0/22
+      name: utility-eu-west-1a
+      type: Utility
+      zone: eu-west-1a
+    - cidr: 172.0.4.0/22
+      name: utility-eu-west-1b
+      type: Utility
+      zone: eu-west-1b
+    - cidr: 172.0.8.0/22
+      name: utility-eu-west-1c
+      type: Utility
+      zone: eu-west-1c
+  topology:
+    dns:
+      type: Public
+    masters: private
+    nodes: private

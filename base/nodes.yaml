@@ -1,0 +1,96 @@
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  name: node-eu-west-1a
+  labels:
+    kops.k8s.io/cluster: k8s-gitops-kops
+spec:
+  associatePublicIp: true
+  image: instance-image
+  instanceMetadata:
+    httpPutResponseHopLimit: 1
+    httpTokens: required
+  machineType: t4g.large
+  minSize: 1
+  maxSize: 1
+  mixedInstancesPolicy:
+    instances:
+      - c6g.xlarge
+      - c6gn.xlarge
+      - m6g.large
+      - r6g.medium
+      - t4g.large
+      - x2gd.medium
+    onDemandAboveBase: 0
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    kops.k8s.io/instancegroup: node-eu-west-1a
+  role: Node
+  subnets:
+    - eu-west-1a
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  name: node-eu-west-1b
+  labels:
+    kops.k8s.io/cluster: k8s-gitops-kops
+spec:
+  associatePublicIp: true
+  image: instance-image
+  instanceMetadata:
+    httpPutResponseHopLimit: 1
+    httpTokens: required
+  machineType: t4g.large
+  minSize: 1
+  maxSize: 1
+  mixedInstancesPolicy:
+    instances:
+      - c6g.xlarge
+      - c6gn.xlarge
+      - m6g.large
+      - r6g.medium
+      - t4g.large
+      - x2gd.medium
+    onDemandAboveBase: 0
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    kops.k8s.io/instancegroup: node-eu-west-1b
+  role: Node
+  subnets:
+    - eu-west-1b
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  name: node-eu-west-1c
+  labels:
+    kops.k8s.io/cluster: k8s-gitops-kops
+spec:
+  associatePublicIp: true
+  image: instance-image
+  instanceMetadata:
+    httpPutResponseHopLimit: 1
+    httpTokens: required
+  machineType: t4g.large
+  maxSize: 1
+  minSize: 1
+  mixedInstancesPolicy:
+    instances:
+      - c6g.xlarge
+      - c6gn.xlarge
+      - m6g.large
+      - r6g.medium
+      - t4g.large
+      - x2gd.medium
+    onDemandAboveBase: 0
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    kops.k8s.io/instancegroup: node-eu-west-1c
+  role: Node
+  subnets:
+    - eu-west-1c

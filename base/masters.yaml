@@ -1,0 +1,87 @@
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  name: master-eu-west-1a
+  labels:
+    kops.k8s.io/cluster: k8s-gitops-kops
+spec:
+  associatePublicIp: false
+  image: instance-image
+  instanceMetadata:
+    httpPutResponseHopLimit: 3
+    httpTokens: required
+  machineType: t4g.medium
+  minSize: 1
+  maxSize: 1
+  mixedInstancesPolicy:
+    instances:
+      - c6g.large
+      - m6g.medium
+      - t4g.medium
+    onDemandAboveBase: 0
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-eu-west-1a
+  role: Master
+  subnets:
+    - eu-west-1a
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  name: master-eu-west-1b
+  labels:
+    kops.k8s.io/cluster: aws.lab.lebiller.dev
+spec:
+  associatePublicIp: false
+  image: instance-image
+  instanceMetadata:
+    httpPutResponseHopLimit: 3
+    httpTokens: required
+  machineType: t4g.medium
+  minSize: 1
+  maxSize: 1
+  mixedInstancesPolicy:
+    instances:
+      - c6g.large
+      - m6g.medium
+      - t4g.medium
+    onDemandAboveBase: 0
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-eu-west-1b
+  role: Master
+  subnets:
+    - eu-west-1b
+---
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  name: master-eu-west-1c
+  labels:
+    kops.k8s.io/cluster: aws.lab.lebiller.dev
+spec:
+  associatePublicIp: true
+  image: instance-image
+  instanceMetadata:
+    httpPutResponseHopLimit: 3
+    httpTokens: required
+  machineType: t4g.medium
+  minSize: 1
+  maxSize: 1
+  mixedInstancesPolicy:
+    instances:
+      - c6g.large
+      - m6g.medium
+      - t4g.medium
+    onDemandAboveBase: 0
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-eu-west-1c
+  role: Master
+  subnets:
+    - eu-west-1c

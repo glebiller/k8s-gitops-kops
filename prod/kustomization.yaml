@@ -1,0 +1,25 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../base/
+commonLabels:
+  kops.k8s.io/cluster: prod-k8s-gitops-kops
+patchesStrategicMerge:
+  - kubernetes.version.patch.yaml
+  - cluster.patch.yaml
+  - masters.patch.yaml
+  - nodes.patch.yaml
+patches:
+  - path: instance.image.patch.yaml
+    target:
+      group: kops.k8s.io
+      version: v1alpha2
+      kind: InstanceGroup
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: prod-k8s-gitops-kops
+    target:
+      kind: Cluster
+      name: k8s-gitops-kops

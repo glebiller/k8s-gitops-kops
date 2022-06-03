@@ -2,95 +2,95 @@
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  name: node-eu-west-1a
+  name: node-us-east-1a
   labels:
-    kops.k8s.io/cluster: k8s-gitops-kops
+    kops.k8s.io/cluster: base.kind.tvld.tech
 spec:
+  cloudLabels:
+    Application: Kubernetes
+    ManagedBy: Kops
   associatePublicIp: true
-  image: instance-image
   instanceMetadata:
     httpPutResponseHopLimit: 1
     httpTokens: required
-  machineType: t4g.large
+  machineType: t4g.medium
   minSize: 1
   maxSize: 1
   mixedInstancesPolicy:
     instances:
-      - c6g.xlarge
-      - c6gn.xlarge
-      - m6g.large
+      - c6g.medium
+      - m6g.medium
       - r6g.medium
-      - t4g.large
-      - x2gd.medium
+      - t4g.medium
     onDemandAboveBase: 0
     onDemandBase: 0
     spotAllocationStrategy: capacity-optimized
   nodeLabels:
-    kops.k8s.io/instancegroup: node-eu-west-1a
+    kops.k8s.io/instancegroup: node-us-east-1a
   role: Node
   subnets:
-    - eu-west-1a
+    - us-east-1a
 ---
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  name: node-eu-west-1b
+  name: node-us-east-1b
   labels:
-    kops.k8s.io/cluster: k8s-gitops-kops
+    kops.k8s.io/cluster: base.kind.tvld.tech
 spec:
+  cloudLabels:
+    Application: Kubernetes
+    ManagedBy: Kops
   associatePublicIp: true
-  image: instance-image
   instanceMetadata:
     httpPutResponseHopLimit: 1
     httpTokens: required
-  machineType: t4g.large
+  machineType: t4g.2xlarge
   minSize: 1
   maxSize: 1
   mixedInstancesPolicy:
     instances:
-      - c6g.xlarge
-      - c6gn.xlarge
-      - m6g.large
+      - c6g.medium
+      - m6g.medium
       - r6g.medium
-      - t4g.large
-      - x2gd.medium
+      - t4g.medium
     onDemandAboveBase: 0
     onDemandBase: 0
     spotAllocationStrategy: capacity-optimized
   nodeLabels:
-    kops.k8s.io/instancegroup: node-eu-west-1b
+    kops.k8s.io/instancegroup: node-us-east-1b
   role: Node
   subnets:
-    - eu-west-1b
+    - us-east-1b
 ---
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  name: node-eu-west-1c
+  name: node-us-east-1c
   labels:
-    kops.k8s.io/cluster: k8s-gitops-kops
+    kops.k8s.io/cluster: base.kind.tvld.tech
 spec:
+  cloudLabels:
+    Application: Kubernetes
+    ManagedBy: Kops
   associatePublicIp: true
-  image: instance-image
   instanceMetadata:
     httpPutResponseHopLimit: 1
     httpTokens: required
-  machineType: t4g.large
+  machineType: t4g.2xlarge
   maxSize: 1
   minSize: 1
   mixedInstancesPolicy:
     instances:
-      - c6g.xlarge
-      - c6gn.xlarge
-      - m6g.large
+      - c6g.medium
+      - m6g.medium
       - r6g.medium
-      - t4g.large
-      - x2gd.medium
+      - t4g.medium
     onDemandAboveBase: 0
     onDemandBase: 0
     spotAllocationStrategy: capacity-optimized
   nodeLabels:
-    kops.k8s.io/instancegroup: node-eu-west-1c
+    kops.k8s.io/instancegroup: node-us-east-1c
   role: Node
   subnets:
-    - eu-west-1c
+    - us-east-1c

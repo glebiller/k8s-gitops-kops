@@ -2,34 +2,36 @@
 apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
-  name: k8s-gitops-kops
+  name: base.kind.tvld.tech
 spec:
-  configBase: s3://k8s-gitops-kops-state/prod-k8s-gitops-kops
-  masterInternalName: k8s.internal.prod.lebiller.dev
-  masterPublicName: k8s.prod.lebiller.dev
+  configBase: s3://tvld-k8s-gitops-kops-state/prod.kind.tvld.tech
+  masterInternalName: k8s.internal.kind.tvld.tech
+  masterPublicName: k8s.prod.kind.tvld.tech
   networkCIDR: 172.20.0.0/16
+  serviceAccountIssuerDiscovery:
+    discoveryStore: s3://tvld-k8s-gitops-kops-oidc
   subnets:
     - cidr: 172.20.32.0/19
-      name: eu-west-1a
+      name: us-east-1a
       type: Private
-      zone: eu-west-1a
+      zone: us-east-1a
     - cidr: 172.20.64.0/19
-      name: eu-west-1b
+      name: us-east-1b
       type: Private
-      zone: eu-west-1b
+      zone: us-east-1b
     - cidr: 172.20.96.0/19
-      name: eu-west-1c
+      name: us-east-1c
       type: Private
-      zone: eu-west-1c
+      zone: us-east-1c
     - cidr: 172.20.0.0/22
-      name: utility-eu-west-1a
+      name: utility-us-east-1a
       type: Utility
-      zone: eu-west-1a
+      zone: us-east-1a
     - cidr: 172.20.4.0/22
-      name: utility-eu-west-1b
+      name: utility-us-east-1b
       type: Utility
-      zone: eu-west-1b
+      zone: us-east-1b
     - cidr: 172.20.8.0/22
-      name: utility-eu-west-1c
+      name: utility-us-east-1c
       type: Utility
-      zone: eu-west-1c
+      zone: us-east-1c

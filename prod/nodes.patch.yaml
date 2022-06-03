@@ -2,7 +2,7 @@
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  name: node-eu-west-1a
+  name: node-us-east-1a
 spec:
   minSize: 2
   maxSize: 4
@@ -10,7 +10,7 @@ spec:
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  name: node-eu-west-1b
+  name: node-us-east-1b
 spec:
   minSize: 2
   maxSize: 4
@@ -18,7 +18,7 @@ spec:
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  name: node-eu-west-1c
+  name: node-us-east-1c
 spec:
   minSize: 2
   maxSize: 4

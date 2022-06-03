@@ -2,8 +2,15 @@
 apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
-  name: k8s-gitops-kops
+  name: base.kind.tvld.tech
 spec:
+  cloudConfig:
+    manageStorageClasses: true
+    awsEBSCSIDriver:
+      enabled: true
+  cloudLabels:
+    Application: Kubernetes
+    ManagedBy: Kops
   additionalPolicies:
     master: |
       [
@@ -34,59 +41,77 @@ spec:
       type: Public
   authentication:
     aws:
-      image: ghcr.io/glebiller/aws-iam-authenticator-arm:v0.5.3
       backendMode: CRD
+      image: ghcr.io/glebiller/aws-iam-authenticator-arm:v0.5.3
+      memoryRequest: 15Mi
+      cpuRequest: 10m
+      memoryLimit: 20Mi
+      cpuLimit: 20m
   authorization:
     rbac: { }
+  certManager:
+    enabled: true
+    managed: false
   channel: stable
-  cloudLabels:
-    Application: Kubernetes
-    ManagedBy: Kops
   cloudControllerManager:
-    image: kissy/aws-cloud-controller-manager:v1.22.0-alpha.0-arm64
     cloudProvider: aws
+    image: k8s.gcr.io/provider-aws/cloud-controller-manager:v1.23.1
   cloudProvider: aws
-  # clusterDNSDomain: cluster.local
-  configBase: s3://k8s-gitops-kops-state/k8s-gitops-kops
+  clusterDNSDomain: cluster.local
   containerRuntime: containerd
   etcdClusters:
-    - cpuRequest: 200m
+    - cpuRequest: 60m
       etcdMembers:
         - encryptedVolume: true
-          instanceGroup: master-eu-west-1a
+          instanceGroup: master-us-east-1a
           name: a
         - encryptedVolume: true
-          instanceGroup: master-eu-west-1b
+          instanceGroup: master-us-east-1b
           name: b
         - encryptedVolume: true
-          instanceGroup: master-eu-west-1c
+          instanceGroup: master-us-east-1c
           name: c
-      memoryRequest: 100Mi
+      memoryRequest: 500Mi
       name: main
-    - cpuRequest: 100m
+    - cpuRequest: 25m
       etcdMembers:
         - encryptedVolume: true
-          instanceGroup: master-eu-west-1a
+          instanceGroup: master-us-east-1a
           name: a
         - encryptedVolume: true
-          instanceGroup: master-eu-west-1b
+          instanceGroup: master-us-east-1b
           name: b
         - encryptedVolume: true
-          instanceGroup: master-eu-west-1c
+          instanceGroup: master-us-east-1c
           name: c
       memoryRequest: 100Mi
       name: events
   iam:
-    allowContainerRegistry: false
+    useServiceAccountExternalPermissions: true
+    allowContainerRegistry: true
     legacy: false
+  karpenter:
+    enabled: true
   kubeAPIServer:
     auditLogMaxAge: 10
     auditLogMaxBackups: 1
     auditLogMaxSize: 100
     cloudProvider: external
+    cpuRequest: 200m
+    cpuLimit: 500m
+    memoryRequest: 700Mi
+    memoryLimit: 1Gi
   kubeControllerManager:
     cloudProvider: external
-    # externalCloudVolumePlugin: aws
+  kubeDNS:
+    provider: CoreDNS
+    memoryLimit: 100Mi
+    cpuRequest: 10m
+    memoryRequest: 30Mi
+    nodeLocalDNS:
+      enabled: true
+      memoryRequest: 12Mi
+      cpuRequest: 5m
   kubeProxy:
     enabled: false
   kubelet:
@@ -94,39 +119,32 @@ spec:
     cloudProvider: external
   kubernetesApiAccess:
     - 0.0.0.0/0
-  kubernetesVersion: 1.22.4
-  masterInternalName: k8s.internal.k8s-gitops-kops
-  masterPublicName: k8s.k8s-gitops-kops
-  networkCIDR: 172.0.0.0/16
   networking:
     cilium:
       enableNodePort: true
+      hubble:
+        enabled: true
+      memoryRequest: 128Mi
+      cpuRequest: 10m
+  nodeProblemDetector:
+    enabled: false
+    image: todo-arm-version
+    memoryRequest: 32Mi
+    cpuRequest: 10m
+  nodeTerminationHandler:
+    enabled: true
+    enableSQSTerminationDraining: true
+    managedASGTag: aws-node-termination-handler/managed
+    prometheusEnable: true
+    memoryRequest: 20Mi
+    cpuRequest: 5m
   nonMasqueradeCIDR: 100.64.0.0/10
-  subnets:
-    - cidr: 172.0.32.0/19
-      name: eu-west-1a
-      type: Private
-      zone: eu-west-1a
-    - cidr: 172.0.64.0/19
-      name: eu-west-1b
-      type: Private
-      zone: eu-west-1b
-    - cidr: 172.0.96.0/19
-      name: eu-west-1c
-      type: Private
-      zone: eu-west-1c
-    - cidr: 172.0.0.0/22
-      name: utility-eu-west-1a
-      type: Utility
-      zone: eu-west-1a
-    - cidr: 172.0.4.0/22
-      name: utility-eu-west-1b
-      type: Utility
-      zone: eu-west-1b
-    - cidr: 172.0.8.0/22
-      name: utility-eu-west-1c
-      type: Utility
-      zone: eu-west-1c
+  serviceAccountIssuerDiscovery:
+    enableAWSOIDCProvider: true
+    additionalAudiences:
+      - sts.amazonaws.com
+  sshAccess:
+    - 0.0.0.0/0
   topology:
     dns:
       type: Public

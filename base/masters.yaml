@@ -2,12 +2,14 @@
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  name: master-eu-west-1a
+  name: master-us-east-1a
   labels:
     kops.k8s.io/cluster: k8s-gitops-kops
 spec:
+  cloudLabels:
+    Application: Kubernetes
+    ManagedBy: Kops
   associatePublicIp: false
-  image: instance-image
   instanceMetadata:
     httpPutResponseHopLimit: 3
     httpTokens: required
@@ -16,27 +18,30 @@ spec:
   maxSize: 1
   mixedInstancesPolicy:
     instances:
-      - c6g.large
+      - c6g.medium
       - m6g.medium
+      - r6g.medium
       - t4g.medium
     onDemandAboveBase: 0
     onDemandBase: 0
     spotAllocationStrategy: capacity-optimized
   nodeLabels:
-    kops.k8s.io/instancegroup: master-eu-west-1a
+    kops.k8s.io/instancegroup: master-us-east-1a
   role: Master
   subnets:
-    - eu-west-1a
+    - us-east-1a
 ---
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  name: master-eu-west-1b
+  name: master-us-east-1b
   labels:
-    kops.k8s.io/cluster: aws.lab.lebiller.dev
+    kops.k8s.io/cluster: k8s-gitops-kops
 spec:
+  cloudLabels:
+    Application: Kubernetes
+    ManagedBy: Kops
   associatePublicIp: false
-  image: instance-image
   instanceMetadata:
     httpPutResponseHopLimit: 3
     httpTokens: required
@@ -45,27 +50,30 @@ spec:
   maxSize: 1
   mixedInstancesPolicy:
     instances:
-      - c6g.large
+      - c6g.medium
       - m6g.medium
+      - r6g.medium
       - t4g.medium
     onDemandAboveBase: 0
     onDemandBase: 0
     spotAllocationStrategy: capacity-optimized
   nodeLabels:
-    kops.k8s.io/instancegroup: master-eu-west-1b
+    kops.k8s.io/instancegroup: master-us-east-1b
   role: Master
   subnets:
-    - eu-west-1b
+    - us-east-1b
 ---
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  name: master-eu-west-1c
+  name: master-us-east-1c
   labels:
-    kops.k8s.io/cluster: aws.lab.lebiller.dev
+    kops.k8s.io/cluster: k8s-gitops-kops
 spec:
+  cloudLabels:
+    Application: Kubernetes
+    ManagedBy: Kops
   associatePublicIp: true
-  image: instance-image
   instanceMetadata:
     httpPutResponseHopLimit: 3
     httpTokens: required
@@ -74,14 +82,15 @@ spec:
   maxSize: 1
   mixedInstancesPolicy:
     instances:
-      - c6g.large
+      - c6g.medium
       - m6g.medium
+      - r6g.medium
       - t4g.medium
     onDemandAboveBase: 0
     onDemandBase: 0
     spotAllocationStrategy: capacity-optimized
   nodeLabels:
-    kops.k8s.io/instancegroup: master-eu-west-1c
+    kops.k8s.io/instancegroup: master-us-east-1c
   role: Master
   subnets:
-    - eu-west-1c
+    - us-east-1c
